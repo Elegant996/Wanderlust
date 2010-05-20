@@ -5,7 +5,7 @@ local BGThickness = 2
 local OffsetX, OffsetY = 10, -10
 local Point, AnchorPoint = "TOPLEFT", "TOPLEFT"
 local trackingsize = 14
-local trackingfontflag = "OUTLINE"
+local trackingfontflag = "THINOUTLINE"
 local trackingowncolor = {0.41, 0.8, 0.94}
 
 --[[ Loading ]]
@@ -100,7 +100,7 @@ id:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
 
 local idtext = id:CreateFontString(nil, "OVERLAY")
 idtext:SetPoint("TOP", Minimap, "TOP", 0, -4)
-idtext:SetFont("Fonts\\FRIZQT__.ttf", 14, "OUTLINE")
+idtext:SetFont("Fonts\\FRIZQT__.ttf", 14, "THINOUTLINE")
 idtext:SetTextColor(color.r, color.g, color.b)
 
 function indiff()
