@@ -230,6 +230,7 @@ local frames = {
     "GameTimeFrame",
     "MiniMapBattlefieldBorder",
 	"MiniMapLFGFrameBorder",
+	"GuildInstanceDifficulty",
 --    "Boss1TargetFrame",
 --    "Boss2TargetFrame",
 --    "Boss3TargetFrame",

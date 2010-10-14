@@ -2,6 +2,6 @@
 ## Title: Wanderlust
 ## Notes: 37% more square than any other minimap mod!
 ## Author: ichik
-## Version: 0.92
+## Version: 0.92a
 
 Wanderlust.lua
