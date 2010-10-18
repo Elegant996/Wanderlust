@@ -29,8 +29,7 @@ Wanderlust:SetScript("OnEvent", function(self, event, addon)
     --[[ Location and scale ]]
     Minimap:ClearAllPoints()
     Minimap:SetPoint(Point, UIParent, AnchorPoint, OffsetX / Scale, OffsetY / Scale)
-    MinimapCluster:SetScale(Scale)
-	MinimapCluster:SetPoint(Point, UIParent, AnchorPoint, OffsetX / Scale, OffsetY / Scale)
+    MinimapCluster:EnableMouse(false)
 
     --[[ Background ]]
     Minimap:SetBackdrop({bgFile = "Interface\\ChatFrame\\ChatFrameBackground", insets = {
