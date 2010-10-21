@@ -1,4 +1,4 @@
---[[Local horror]]
+﻿--[[Local horror]]
 local Scale = 1
 local r, g, b, a = 0, 0, 0, 1
 local BGThickness = 2
@@ -105,34 +105,53 @@ idtext:SetFont("Fonts\\FRIZQT__.ttf", 14, "THINOUTLINE")
 idtext:SetTextColor(color.r, color.g, color.b)
 
 function indiff()
-	local instance, instancetype = IsInInstance()
+	local inInstance, instancetype = IsInInstance()
 	local _, _, difficultyIndex, _, _, playerDifficulty, isDynamic = GetInstanceInfo()
-	if instance and instancetype == "raid" then
-		if isDynamic and difficultyIndex == 1 then
+	if inInstance and instancetype == "raid" then
+		if isDynamic and difficultyIndex == 4 then
 			if playerDifficulty == 0 then
-				idtext:SetText("10") end
-			if playerDifficulty == 1 then
-				idtext:SetText("10H") end
-			end
-		if isDynamic and difficultyIndex == 2 then
-			if playerDifficulty == 0 then
-				idtext:SetText("25") end
-			if playerDifficulty == 1 then
-				idtext:SetText("25H") end
-			end
-		if not isDynamic then
-			if difficultyIndex == 1 then
-				idtext:SetText("10") end
-			if difficultyIndex == 2 then
-				idtext:SetText("25") end
-			if difficultyIndex == 3 then
-				idtext:SetText("10H") end
-			if difficultyIndex == 4 then
-				idtext:SetText("25H") end
+				idtext:SetText("25H")
 			end
 		end
-	if not instance then
-		idtext:SetText("") end
+		if isDynamic and difficultyIndex == 3 then
+			if playerDifficulty == 0 then
+				idtext:SetText("10H")
+			end
+		end
+		if isDynamic and difficultyIndex == 2 then
+			if playerDifficulty == 0 then
+				idtext:SetText("25")
+			end
+			if playerDifficulty == 1 then
+				idtext:SetText("25H") 
+			end
+		end
+		if isDynamic and difficultyIndex == 1 then
+			if playerDifficulty == 0 then
+				idtext:SetText("10") 
+			end
+			if playerDifficulty == 1 then
+				idtext:SetText("10H") 
+			end
+		end
+		if not isDynamic then
+			if difficultyIndex == 1 then
+				idtext:SetText("10") 
+			end
+			if difficultyIndex == 2 then
+				idtext:SetText("25") 
+			end
+			if difficultyIndex == 3 then
+				idtext:SetText("10H") 
+			end
+			if difficultyIndex == 4 then
+				idtext:SetText("25H") 
+			end
+		end
+	end
+	if not inInstance then
+		idtext:SetText("") 
+	end
 end
 id:SetScript("OnEvent", function() indiff() end)
 
