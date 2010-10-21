@@ -1,5 +1,5 @@
 --[[Local horror]]
-local Scale = 0.9
+local Scale = 1
 local r, g, b, a = 0, 0, 0, 1
 local BGThickness = 2
 local OffsetX, OffsetY = 10, -10
@@ -28,6 +28,7 @@ Wanderlust:SetScript("OnEvent", function(self, event, addon)
     
     --[[ Location and scale ]]
     Minimap:ClearAllPoints()
+	Minimap:SetScale(Scale)
     Minimap:SetPoint(Point, UIParent, AnchorPoint, OffsetX / Scale, OffsetY / Scale)
     MinimapCluster:EnableMouse(false)
 
