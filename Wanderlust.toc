@@ -1,4 +1,4 @@
-## Interface: 40000
+## Interface: 40100
 ## Title: Wanderlust
 ## Notes: 37% more square than any other minimap mod!
 ## Author: ichik
