@@ -1,7 +1,7 @@
-## Interface: 40100
+## Interface: 90207
 ## Title: Wanderlust
 ## Notes: 37% more square than any other minimap mod!
-## Author: ichik
-## Version: 0.95
+## Author: ichik | Elegant
+## Version: 0.96
 
 Wanderlust.lua

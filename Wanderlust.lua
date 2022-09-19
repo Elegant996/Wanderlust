@@ -2,14 +2,14 @@
 local Scale = 1
 local r, g, b, a = 0, 0, 0, 1
 local BGThickness = 2
-local OffsetX, OffsetY = 10, -10
-local Point, AnchorPoint = "TOPLEFT", "TOPLEFT"
+local OffsetX, OffsetY = -10, -10
+local Point, AnchorPoint = "TOPRIGHT", "TOPRIGHT"
 local trackingsize = 14
 local trackingfontflag = "THINOUTLINE"
 local trackingowncolor = {0.41, 0.8, 0.94}
 
 --[[ Loading ]]
-Wanderlust = CreateFrame("Frame", "Wanderlust", UIParent)
+Wanderlust = CreateFrame("Frame", "Wanderlust", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 Wanderlust:RegisterEvent("ADDON_LOADED")
 Wanderlust:SetScript("OnEvent", function(self, event, addon)
     if(addon~="Wanderlust") then return end
@@ -33,13 +33,14 @@ Wanderlust:SetScript("OnEvent", function(self, event, addon)
     MinimapCluster:EnableMouse(false)
 
     --[[ Background ]]
+	Mixin(Minimap, BackdropTemplateMixin or {})
     Minimap:SetBackdrop({bgFile = "Interface\\ChatFrame\\ChatFrameBackground", insets = {
         top = -BGThickness / Scale,
         left = -BGThickness / Scale,
         bottom = -BGThickness / Scale,
         right = -BGThickness / Scale
     }})
-     Minimap:SetBackdropColor(r, g, b, a)
+    Minimap:SetBackdropColor(r, g, b, a)
 
     --[[ Click func ]]
     
@@ -67,7 +68,7 @@ Wanderlust:SetScript("OnEvent", function(self, event, addon)
 	MiniMapTrackingIcon:SetWidth(20)
 	MiniMapTrackingIcon:SetHeight(20)
 	
-    Wanderlust.tracking = CreateFrame("Frame", nil, Minimap)
+    Wanderlust.tracking = CreateFrame("Frame", nil, Minimap, BackdropTemplateMixin and "BackdropTemplate")
     Wanderlust.tracking:SetPoint("BOTTOM", 0, 20)
     
     local t = Wanderlust.tracking:CreateFontString(nil, "OVERLAY")
@@ -77,7 +78,7 @@ Wanderlust:SetScript("OnEvent", function(self, event, addon)
     
     t:SetTextColor(unpack(trackingowncolor))
     
-    local function UpdateTrackignText()
+    local function UpdateTrackingText()
         for i = 1, GetNumTrackingTypes() do
             local name, texture, active = GetTrackingInfo(i)
             if(active) then
@@ -94,10 +95,12 @@ Wanderlust:SetScript("OnEvent", function(self, event, addon)
 
 local _, class = UnitClass("player")
 local color = RAID_CLASS_COLORS[class]
-local id = CreateFrame("Frame", nil, UIParent)
+local id = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 id:SetPoint("TOP", Minimap, "TOP")
 id:RegisterEvent("PLAYER_ENTERING_WORLD")
 id:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
+id:RegisterEvent("GROUP_ROSTER_UPDATE")
+id:RegisterEvent("RAID_ROSTER_UPDATE")
 
 local idtext = id:CreateFontString(nil, "OVERLAY")
 idtext:SetPoint("TOP", Minimap, "TOP", 0, -4)
@@ -105,48 +108,50 @@ idtext:SetFont("Fonts\\FRIZQT__.ttf", 14, "THINOUTLINE")
 idtext:SetTextColor(color.r, color.g, color.b)
 
 function indiff()
-	local inInstance, instancetype = IsInInstance()
-	local _, _, difficultyIndex, _, _, playerDifficulty, isDynamic = GetInstanceInfo()
-	if inInstance and instancetype == "raid" then
-		if isDynamic and difficultyIndex == 4 then
-			if playerDifficulty == 0 then
-				idtext:SetText("25H")
-			end
-		end
-		if isDynamic and difficultyIndex == 3 then
-			if playerDifficulty == 0 then
-				idtext:SetText("10H")
-			end
-		end
-		if isDynamic and difficultyIndex == 2 then
-			if playerDifficulty == 0 then
-				idtext:SetText("25")
-			end
-			if playerDifficulty == 1 then
-				idtext:SetText("25H") 
-			end
-		end
-		if isDynamic and difficultyIndex == 1 then
-			if playerDifficulty == 0 then
-				idtext:SetText("10") 
-			end
-			if playerDifficulty == 1 then
-				idtext:SetText("10H") 
-			end
-		end
-		if not isDynamic then
-			if difficultyIndex == 1 then
-				idtext:SetText("10") 
-			end
-			if difficultyIndex == 2 then
-				idtext:SetText("25") 
-			end
-			if difficultyIndex == 3 then
-				idtext:SetText("10H") 
-			end
-			if difficultyIndex == 4 then
-				idtext:SetText("25H") 
-			end
+	local inInstance, _ = IsInInstance()
+	local _, _, difficultyID = GetInstanceInfo()
+	local numGroupMembers = GetNumGroupMembers()
+	local cmLevel = C_ChallengeMode.GetActiveKeystoneInfo()
+	
+	if inInstance then
+		if difficultyID == 1 then
+			idtext:SetText("5")
+		elseif difficultyID == 2 then
+			idtext:SetText("5H")
+		elseif difficultyID == 3 then
+			idtext:SetText("10")
+		elseif difficultyID == 4 then
+			idtext:SetText("25")
+		elseif difficultyID == 5 then
+			idtext:SetText("10H")
+		elseif difficultyID == 6 then
+			idtext:SetText("25H") 
+		elseif difficultyID == 7 then
+			idtext:SetText("LFR") 
+		elseif difficultyID == 8 then
+			idtext:SetText("5M+") 
+		elseif difficultyID == 9 then
+			idtext:SetText("40")
+		elseif difficultyID == 11 then
+			idtext:SetText("3H")
+		elseif difficultyID == 12 then
+			idtext:SetText("3")
+		elseif difficultyID == 14 then
+			idtext:SetText((numGroupMembers > 10 and numGroupMembers or 10).."N")
+		elseif difficultyID == 15 then
+			idtext:SetText((numGroupMembers > 10 and numGroupMembers or 10).."H")
+		elseif difficultyID == 16 then
+			idtext:SetText("20M")
+		elseif difficultyID == 17 then
+			idtext:SetText((numGroupMembers > 10 and numGroupMembers or 10).."LFR")
+		elseif difficultyID == 23 then
+			idtext:SetText("5M")
+		elseif difficultyID == 24 then
+			idtext:SetText("5TW")
+		elseif difficultyID == 33 then
+			idtext:SetText((numGroupMembers > 10 and numGroupMembers or 10).."TW")
+		elseif difficultyID == 34 then
+			idtext:SetText("PvP")
 		end
 	end
 	if not inInstance then
@@ -156,14 +161,14 @@ end
 id:SetScript("OnEvent", function() indiff() end)
 
     Minimap:SetScript("OnEnter", function()
-        UpdateTrackignText()
+        UpdateTrackingText()
 		MiniMapTracking:SetAlpha(1)
         Wanderlust.tracking:SetAlpha(1)
     end)
 	
 		
 	MiniMapTrackingButton:SetScript("OnEnter",function()
-		UpdateTrackignText()
+		UpdateTrackingText()
 		MiniMapTracking:SetAlpha(1)
         Wanderlust.tracking:SetAlpha(1)
 	end)
@@ -218,11 +223,10 @@ end)
 
     
 --[[ Calendar ]]
-
-local cal = CreateFrame("Frame", nil, Minimap)
+local cal = CreateFrame("Frame", nil, Minimap, BackdropTemplateMixin and "BackdropTemplate")
 GameTimeFrame:HookScript("OnShow", cal.Show)
 GameTimeFrame:SetScript("OnEvent", function(self, event, addon)
-	if CalendarGetNumPendingInvites() ~= 0 then
+	if C_Calendar.GetNumPendingInvites() ~= 0 then
 		clockTime:SetTextColor(0, 1, 0)
 	else
 		clockTime:SetTextColor(1, 1, 1)
@@ -237,7 +241,7 @@ function GetMinimapShape() return "SQUARE" end
 --[[ Hiding ugly things	]]
 local dummy = function() end
 local frames = {
-    "MiniMapVoiceChatFrame",
+    --"MiniMapVoiceChatFrame",
     "MiniMapWorldMapButton",
     "MinimapZoneTextButton",
     "MiniMapMailBorder",
@@ -248,8 +252,7 @@ local frames = {
     "MinimapZoomIn",
     "MinimapBorder",
     "GameTimeFrame",
-    "MiniMapBattlefieldBorder",
-	"MiniMapLFGFrameBorder",
+	"QueueStatusMinimapButtonBorder",
 	"GuildInstanceDifficulty",
 --    "Boss1TargetFrame",
 --    "Boss2TargetFrame",
@@ -276,17 +279,17 @@ Minimap:SetScript("OnMouseWheel", function(_, zoom)
 end)
 
 --[[ BG icon ]]
-MiniMapBattlefieldFrame:ClearAllPoints()
-MiniMapBattlefieldFrame:SetParent(Minimap)
-MiniMapBattlefieldFrame:SetPoint('TOPRIGHT', 2, -2)
-MiniMapBattlefieldBorder:SetTexture(nil)
-BattlegroundShine:Hide()
+--QueueStatusMinimapButton:ClearAllPoints()
+--QueueStatusMinimapButton:SetParent(Minimap)
+--QueueStatusMinimapButton:SetPoint('TOPRIGHT', 2, -2)
+--MiniMapBattlefieldBorder:SetTexture(nil)
+--BattlegroundShine:Hide()
 
 --[[ Random Group icon ]]
-MiniMapLFGFrame:ClearAllPoints()
-MiniMapLFGFrame:SetParent(Minimap)
-MiniMapLFGFrame:SetPoint('TOPRIGHT', 2, -2)
-MiniMapLFGFrame:SetHighlightTexture(nil)
+QueueStatusMinimapButton:ClearAllPoints()
+QueueStatusMinimapButton:SetParent(Minimap)
+QueueStatusMinimapButton:SetPoint('TOPRIGHT', 2, -2)
+QueueStatusMinimapButton:SetHighlightTexture(nil)
 
 --[[ Mail icon ]]
 MiniMapMailFrame:ClearAllPoints()
