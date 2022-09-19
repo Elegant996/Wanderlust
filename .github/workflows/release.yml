@@ -13,12 +13,11 @@ jobs:
 
     env:
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
 
     steps:
 
       - name: Clone project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Package and release
-        uses: BigWigsMods/packager@v1
+        uses: BigWigsMods/packager@v2
